@@ -11,4 +11,11 @@ export default class Vector {
     this.x += vector.x;
     this.y += vector.y;
   }
+
+  public distance(vector: Vector): number {
+    const dx = this.x - vector.x;
+    const dy = this.y - vector.y;
+
+    return Math.sqrt(dx * dx + dy * dy)
+  }
 }

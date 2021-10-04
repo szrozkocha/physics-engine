@@ -31,6 +31,9 @@ export default class Game extends GameWithLoop {
     protected tick(frame: number): void {
         this.leftBall.tick(frame);
         this.rightBall.tick(frame);
+
+        this.leftBall.processCollision(this.rightBall);
+        this.rightBall.processCollision(this.leftBall);
     }
 
     protected draw(): void {

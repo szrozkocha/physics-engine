@@ -27,4 +27,11 @@ export default class Ball {
   public draw(render: Render): void {
     render.drawCircle(this.position.x, this.position.y, this.r, this.color);
   }
+
+  public processCollision(ball: Ball): void {
+    if(this.position.distance(ball.position) < this.r + ball.r) {
+      this.speed = new Vector(0, 0);
+      this.acceleration = new Vector(0, 0);
+    }
+  }
 }
