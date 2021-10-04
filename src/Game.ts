@@ -10,6 +10,7 @@ export default class Game extends GameWithLoop {
       new Vector(100, 300),
       new Vector(1, 0),
       new Vector(0.1, 0),
+      1,
       10,
       "#FF0000"
     );
@@ -18,6 +19,7 @@ export default class Game extends GameWithLoop {
       new Vector(700, 300),
       new Vector(-1, 0),
       new Vector(-0.1, 0),
+      1,
       10,
       "#00FF00"
     );

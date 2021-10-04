@@ -5,14 +5,16 @@ export default class Ball {
   public position: Vector;
   public speed: Vector;
   public acceleration: Vector;
+  public mass: number;
   public r: number;
   public color: string;
 
 
-  constructor(position: Vector, speed: Vector, acceleration: Vector, r: number, color: string) {
+  constructor(position: Vector, speed: Vector, acceleration: Vector, mass: number, r: number, color: string) {
     this.position = position;
     this.speed = speed;
     this.acceleration = acceleration;
+    this.mass = mass;
     this.r = r;
     this.color = color;
   }
@@ -52,7 +54,9 @@ export default class Ball {
 
     this.position = previousPosition;
 
-    this.speed = new Vector(0, 0);
-    this.acceleration = new Vector(0, 0);
+    let speed = (this.mass - ball.mass) / (this.mass + ball.mass) * this.speed.length() + 2 * ball.mass / (this.mass + ball.mass) * ball.speed.length();
+
+    this.speed = this.speed.inverse();
+    this.speed.scaleTo(speed);
   }
 }
