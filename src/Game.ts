@@ -32,8 +32,10 @@ export default class Game extends GameWithLoop {
         this.leftBall.tick(frame);
         this.rightBall.tick(frame);
 
-        this.leftBall.processCollision(this.rightBall);
-        this.rightBall.processCollision(this.leftBall);
+        if(this.leftBall.testCollision(this.rightBall)) {
+            this.leftBall.processCollision(this.rightBall);
+            this.rightBall.processCollision(this.leftBall);
+        }
     }
 
     protected draw(): void {

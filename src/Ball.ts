@@ -28,10 +28,31 @@ export default class Ball {
     render.drawCircle(this.position.x, this.position.y, this.r, this.color);
   }
 
+  public testCollision(ball: Ball): boolean {
+    return this.position.distance(ball.position) < this.r + ball.r;
+  }
+
+// @ts-ignore
   public processCollision(ball: Ball): void {
-    if(this.position.distance(ball.position) < this.r + ball.r) {
-      this.speed = new Vector(0, 0);
-      this.acceleration = new Vector(0, 0);
-    }
+    let previousPosition = this.position.clone();
+    previousPosition.translate(this.speed.inverse());
+
+    let previousBallPosition = ball.position.clone();
+    previousBallPosition.translate(ball.speed.inverse());
+
+    let previousDistance = previousPosition.distance(previousBallPosition);
+
+    let spaceLeft = previousDistance - this.r - ball.r;
+    let speedRatio = this.speed.length() / (this.speed.length() + ball.speed.length());
+
+    let toMove = this.speed.clone()
+    toMove.scaleTo(spaceLeft * speedRatio);
+
+    previousPosition.translate(toMove);
+
+    this.position = previousPosition;
+
+    this.speed = new Vector(0, 0);
+    this.acceleration = new Vector(0, 0);
   }
 }
