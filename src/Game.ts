@@ -6,12 +6,20 @@ import Vector from "./engine/Vector";
 const FPS = 60;
 
 export default class Game extends GameWithLoop {
-    private ball: Ball = new Ball(
+    private leftBall: Ball = new Ball(
       new Vector(100, 300),
       new Vector(1, 0),
       new Vector(0.1, 0),
       10,
       "#FF0000"
+    );
+
+    private rightBall: Ball = new Ball(
+      new Vector(700, 300),
+      new Vector(-1, 0),
+      new Vector(-0.1, 0),
+      10,
+      "#00FF00"
     );
 
     constructor(private render: Render) {
@@ -21,11 +29,13 @@ export default class Game extends GameWithLoop {
 
     // @ts-ignore
     protected tick(frame: number): void {
-        this.ball.tick(frame);
+        this.leftBall.tick(frame);
+        this.rightBall.tick(frame);
     }
 
     protected draw(): void {
         this.render.clear();
-        this.ball.draw(this.render);
+        this.leftBall.draw(this.render);
+        this.rightBall.draw(this.render);
     }
 }
