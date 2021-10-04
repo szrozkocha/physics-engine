@@ -1,11 +1,18 @@
 import GameWithLoop from "./engine/GameWithLoop";
 import {Render} from "./engine/Render";
 import Ball from "./Ball";
+import Vector from "./engine/Vector";
 
 const FPS = 60;
 
 export default class Game extends GameWithLoop {
-    private ball: Ball = new Ball(100, 300, 10, "#FF0000");
+    private ball: Ball = new Ball(
+      new Vector(100, 300),
+      new Vector(1, 0),
+      new Vector(0.1, 0),
+      10,
+      "#FF0000"
+    );
 
     constructor(private render: Render) {
         super(FPS);

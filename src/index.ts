@@ -18,15 +18,14 @@ function getCanvas(canvasId: string): CanvasRenderingContext2D {
     throw new HtmlException("Canvas don't exists!");
 }
 
-const render = new Render(getCanvas("canvas"))
-render.clear();
-let game: Game = new Game(render);
+window.onload = function () {
+    const render = new Render(getCanvas("canvas"))
+    const game: Game = new Game(render);
 
-
-function run(timestamp: number): void {
-    game.update(timestamp);
+    function run(timestamp: number): void {
+        game.update(timestamp);
+        requestAnimationFrame(run);
+    }
 
     requestAnimationFrame(run);
-}
-
-requestAnimationFrame(run);
+};
