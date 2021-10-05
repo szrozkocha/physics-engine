@@ -11,7 +11,7 @@ export default class Game extends GameWithLoop {
       new PhysicsState(
         new Vector(100, 300),
         new Vector(1, 0),
-        new Vector(0.1, 0),
+        new Vector(0, 0.1),
         1
       ),
       10,
@@ -22,7 +22,7 @@ export default class Game extends GameWithLoop {
         new PhysicsState(
         new Vector(700, 300),
         new Vector(-1, 0),
-        new Vector(-0.1, 0),
+        new Vector(0, 0.1),
         1
       ),
       10,

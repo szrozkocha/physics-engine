@@ -21,18 +21,18 @@ export default class Ball {
     this.physicsState.tick(frame);
 
     if(this.physicsState.position.x - this.r < 0) {
-      this.physicsState.speed.x = -this.physicsState.speed.x;
+      this.physicsState.speed.x = -this.physicsState.speed.x * 0.75;
       this.physicsState.position.x = this.r;
     } else if(this.physicsState.position.x + this.r > BOUNDING_BOX_WIDTH) {
-      this.physicsState.speed.x = -this.physicsState.speed.x;
+      this.physicsState.speed.x = -this.physicsState.speed.x * 0.75;
       this.physicsState.position.x = BOUNDING_BOX_WIDTH - this.r;
     }
 
     if(this.physicsState.position.y - this.r < 0) {
-      this.physicsState.speed.y = -this.physicsState.speed.y;
+      this.physicsState.speed.y = -this.physicsState.speed.y * 0.75;
       this.physicsState.position.y = this.r;
     } else if(this.physicsState.position.y + this.r > BOUNDING_BOX_HEIGHT) {
-      this.physicsState.speed.y = -this.physicsState.speed.y;
+      this.physicsState.speed.y = -this.physicsState.speed.y * 0.75;
       this.physicsState.position.y = BOUNDING_BOX_HEIGHT - this.r;
     }
   }
