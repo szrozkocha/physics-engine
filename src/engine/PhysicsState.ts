@@ -1,5 +1,7 @@
 import Vector from "./Vector";
 
+const AIR_RESISTANCE = 0.999;
+
 export default class PhysicsState {
   public position: Vector;
   public speed: Vector;
@@ -18,5 +20,7 @@ export default class PhysicsState {
     this.position.translate(this.speed);
 
     this.speed.translate(this.acceleration);
+
+    this.acceleration.scaleTo(this.acceleration.length() * AIR_RESISTANCE);
   }
 }

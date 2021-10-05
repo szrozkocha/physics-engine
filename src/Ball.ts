@@ -1,6 +1,8 @@
 import {Render} from "./engine/Render";
 import PhysicsState from "./engine/PhysicsState";
 
+const BOUNCE_LOSS_FACTOR = 0.99;
+
 export default class Ball {
   public physicsState: PhysicsState;
   public r: number;
@@ -42,7 +44,7 @@ export default class Ball {
       + 2 * ball.physicsState.mass / (this.physicsState.mass + ball.physicsState.mass) * ball.physicsState.speed.length();
 
     let newSpeed = this.physicsState.speed.inverse();
-    newSpeed.scaleTo(speed);
+    newSpeed.scaleTo(speed * BOUNCE_LOSS_FACTOR);
 
     return new PhysicsState(newPosition, newSpeed, this.physicsState.acceleration, this.physicsState.mass);
   }
