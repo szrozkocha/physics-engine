@@ -46,4 +46,8 @@ export default class Vector {
   public inverse(): Vector {
     return new Vector(-this.x, -this.y);
   }
+
+  public dot(vector: Vector): number {
+    return this.x * vector.x + this.y * vector.y;
+  }
 }

@@ -1,5 +1,6 @@
 import {Render} from "./engine/Render";
 import PhysicsState from "./engine/PhysicsState";
+import Vector from "./engine/Vector";
 
 const BOUNCE_LOSS_FACTOR = 0.99;
 const BOUNDING_BOX_WIDTH = 800;
@@ -58,11 +59,25 @@ export default class Ball {
     let newPosition = this.physicsState.position.clone();
     newPosition.translate(toMove);
 
-    let speed = (this.physicsState.mass - ball.physicsState.mass) / (this.physicsState.mass + ball.physicsState.mass) * this.physicsState.speed.length()
-      + 2 * ball.physicsState.mass / (this.physicsState.mass + ball.physicsState.mass) * ball.physicsState.speed.length();
+    let normal = new Vector(ball.physicsState.position.x - this.physicsState.position.x, ball.physicsState.position.y - this.physicsState.position.y);
+    normal.normalize();
+    let tangent = new Vector(-normal.y, normal.x);
 
-    let newSpeed = this.physicsState.speed.inverse();
-    newSpeed.scaleTo(speed * BOUNCE_LOSS_FACTOR);
+    let normalSpeed = normal.dot(this.physicsState.speed);
+    let tangentSpeed = tangent.dot(this.physicsState.speed);
+
+    let normalSpeedBall = normal.dot(ball.physicsState.speed);
+
+    let newNormalSpeed = (normalSpeed * (this.physicsState.mass - ball.physicsState.mass) + 2 * ball.physicsState.mass * normalSpeedBall) / (this.physicsState.mass + ball.physicsState.mass);
+    let newTangentSpeed = tangentSpeed;
+
+    let newNormal = normal.clone();
+    newNormal.scaleTo(newNormalSpeed * BOUNCE_LOSS_FACTOR);
+
+    let newTangent = tangent.clone();
+    newTangent.scaleTo(newTangentSpeed * BOUNCE_LOSS_FACTOR);
+
+    let newSpeed = new Vector(newNormal.x + newTangent.x, newNormal.y + newTangent.y);
 
     return new PhysicsState(newPosition, newSpeed, this.physicsState.acceleration, this.physicsState.mass);
   }
