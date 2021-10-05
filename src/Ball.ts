@@ -1,62 +1,49 @@
 import {Render} from "./engine/Render";
-import Vector from "./engine/Vector";
+import PhysicsState from "./engine/PhysicsState";
 
 export default class Ball {
-  public position: Vector;
-  public speed: Vector;
-  public acceleration: Vector;
-  public mass: number;
+  public physicsState: PhysicsState;
   public r: number;
   public color: string;
 
 
-  constructor(position: Vector, speed: Vector, acceleration: Vector, mass: number, r: number, color: string) {
-    this.position = position;
-    this.speed = speed;
-    this.acceleration = acceleration;
-    this.mass = mass;
+  constructor(physicsState: PhysicsState, r: number, color: string) {
+    this.physicsState = physicsState;
     this.r = r;
     this.color = color;
   }
 
-// @ts-ignore
   public tick(frame: number): void {
-    this.position.translate(this.speed);
-
-    this.speed.translate(this.acceleration);
+    this.physicsState.tick(frame);
   }
 
   public draw(render: Render): void {
-    render.drawCircle(this.position.x, this.position.y, this.r, this.color);
+    render.drawCircle(this.physicsState.position.x, this.physicsState.position.y, this.r, this.color);
   }
 
   public testCollision(ball: Ball): boolean {
-    return this.position.distance(ball.position) < this.r + ball.r;
+    return this.physicsState.position.distance(ball.physicsState.position) < this.r + ball.r;
   }
 
 // @ts-ignore
-  public processCollision(ball: Ball): void {
-    let previousPosition = this.position.clone();
-    previousPosition.translate(this.speed.inverse());
+  public processCollision(ball: Ball): PhysicsState {
+    let distance = this.physicsState.position.distance(ball.physicsState.position);
 
-    let previousBallPosition = ball.position.clone();
-    previousBallPosition.translate(ball.speed.inverse());
+    let spaceLeft = distance - this.r - ball.r;
+    let speedRatio = this.physicsState.speed.length() / (this.physicsState.speed.length() + ball.physicsState.speed.length());
 
-    let previousDistance = previousPosition.distance(previousBallPosition);
-
-    let spaceLeft = previousDistance - this.r - ball.r;
-    let speedRatio = this.speed.length() / (this.speed.length() + ball.speed.length());
-
-    let toMove = this.speed.clone()
+    let toMove = this.physicsState.speed.clone()
     toMove.scaleTo(spaceLeft * speedRatio);
 
-    previousPosition.translate(toMove);
+    let newPosition = this.physicsState.position.clone();
+    newPosition.translate(toMove);
 
-    this.position = previousPosition;
+    let speed = (this.physicsState.mass - ball.physicsState.mass) / (this.physicsState.mass + ball.physicsState.mass) * this.physicsState.speed.length()
+      + 2 * ball.physicsState.mass / (this.physicsState.mass + ball.physicsState.mass) * ball.physicsState.speed.length();
 
-    let speed = (this.mass - ball.mass) / (this.mass + ball.mass) * this.speed.length() + 2 * ball.mass / (this.mass + ball.mass) * ball.speed.length();
+    let newSpeed = this.physicsState.speed.inverse();
+    newSpeed.scaleTo(speed);
 
-    this.speed = this.speed.inverse();
-    this.speed.scaleTo(speed);
+    return new PhysicsState(newPosition, newSpeed, this.physicsState.acceleration, this.physicsState.mass);
   }
 }
