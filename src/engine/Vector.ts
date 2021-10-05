@@ -19,8 +19,10 @@ export default class Vector {
   public normalize(): void {
     const length = this.length();
 
-    this.x /= length;
-    this.y /= length;
+    if(length !== 0) {
+      this.x /= length;
+      this.y /= length;
+    }
   }
 
   public scaleTo(length: number): void {

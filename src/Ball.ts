@@ -2,6 +2,8 @@ import {Render} from "./engine/Render";
 import PhysicsState from "./engine/PhysicsState";
 
 const BOUNCE_LOSS_FACTOR = 0.99;
+const BOUNDING_BOX_WIDTH = 800;
+const BOUNDING_BOX_HEIGHT = 600;
 
 export default class Ball {
   public physicsState: PhysicsState;
@@ -17,6 +19,22 @@ export default class Ball {
 
   public tick(frame: number): void {
     this.physicsState.tick(frame);
+
+    if(this.physicsState.position.x - this.r < 0) {
+      this.physicsState.speed.x = -this.physicsState.speed.x;
+      this.physicsState.position.x = this.r;
+    } else if(this.physicsState.position.x + this.r > BOUNDING_BOX_WIDTH) {
+      this.physicsState.speed.x = -this.physicsState.speed.x;
+      this.physicsState.position.x = BOUNDING_BOX_WIDTH - this.r;
+    }
+
+    if(this.physicsState.position.y - this.r < 0) {
+      this.physicsState.speed.y = -this.physicsState.speed.y;
+      this.physicsState.position.y = this.r;
+    } else if(this.physicsState.position.y + this.r > BOUNDING_BOX_HEIGHT) {
+      this.physicsState.speed.y = -this.physicsState.speed.y;
+      this.physicsState.position.y = BOUNDING_BOX_HEIGHT - this.r;
+    }
   }
 
   public draw(render: Render): void {
